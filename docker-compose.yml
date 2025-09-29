@@ -1,0 +1,26 @@
+name: langgraph-redis-example
+services:
+  agent:
+    build:
+      context: .  # Build from current directory
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./:/app
+      - /app/.venv
+      - ./data/:/app/langgraph-checkpoint-redis
+    env_file:
+      - .env
+    environment:
+      - REDIS_URL=redis://redis:6379
+      #   - USER_AGENT=LangGraphRedisExample/0.0.1
+      # user: agent
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+      - "8010:8010"
